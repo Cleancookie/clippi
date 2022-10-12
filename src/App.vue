@@ -48,7 +48,13 @@ export default {
       await ffmpeg.load()
       const { name } = this.video;
       ffmpeg.FS('writeFile', name, await fetchFile(this.video));
-      await ffmpeg.run('-i', '-c', 'copy', '-ss', this.start, '-to', this.end, name, 'output.mp4');
+      await ffmpeg.run(
+        '-ss', `${Math.floor(this.start)}`, 
+        '-i', name, 
+        '-c', 'copy', 
+        '-to', `${Math.ceil(this.end)}`,
+        'output.mp4'
+      );
       const data = ffmpeg.FS('readFile', 'output.mp4');
       let blobUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
       window.open(blobUrl);
