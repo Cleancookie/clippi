@@ -6,7 +6,8 @@
       <input type="file" name="fileInput" id="fileInput" @change="fileChanged" class="file:mr-4 file:py-2 file:px-4
                 file:rounded-full file:border-0
                 file:text-sm file:font-semibold
-                file:bg-cyan-500 file:text-white">
+                file:bg-cyan-500 file:text-gray-100 
+                ">
     </section>
 
     <section v-if="video !== null" class="flex flex-col gap-4 items-center">
@@ -16,14 +17,17 @@
       </video>
 
       <div class="flex gap-4">
-        <button @click="setStart" class="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full">Start {{ start }}</button>
-        <button @click="setEnd" class="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full">End {{ end }}</button>
+        <button @click="setStart" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full">Start {{ start }}</button>
+        <button @click="setEnd" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full">End {{ end }}</button>
       </div>
     </section>
 
     <section v-if="start && end" class="flex flex-col gap-2 items-center">
       <h1 class="text-xl">3. Trim & Save ✂️</h1>
-      <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full">{{ cutLabel }}</button>
+
+      <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting" :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
+        Cut 
+      </button>
     </section>
   </div>
 </template>
@@ -38,7 +42,7 @@ export default {
       video: null,
       start: null,
       end: null,
-      cutLabel: 'Cut',
+      cutting: false,
     }
   },
   computed: {
@@ -58,7 +62,7 @@ export default {
       this.end = this.$refs.video.currentTime;
     },
     async cut(event) {
-      this.cutLabel = 'Cutting...';
+      this.cutting = true;
       const ffmpeg = createFFmpeg({ log: true })
       await ffmpeg.load()
       const { name } = this.video;
@@ -75,8 +79,7 @@ export default {
       const data = ffmpeg.FS('readFile', 'output.mp4');
       let blobUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
       window.open(blobUrl);
-      this.cutLabel = 'Done';
-      setTimeout(() => { this.cutLabel = 'Cut'}, 2000)
+      this.cutting = false;
     }
   }
 };
