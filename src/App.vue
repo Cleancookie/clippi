@@ -12,7 +12,7 @@
 
     <section v-if="video !== null" class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">2. Trim your clip ⌚</h1>
-      <video controls width="800" ref="video" :key="video">
+      <video controls :width="'800'" ref="video" :key="video">
         <source :src="videoUrl" :type="video.type"/>
       </video>
 
@@ -25,9 +25,14 @@
     <section v-if="start && end" class="flex flex-col gap-2 items-center">
       <h1 class="text-xl">3. Trim & Save ✂️</h1>
 
-      <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting" :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
-        Cut 
-      </button>
+      <div class="flex gap-2">
+        <input type="text" name="filename" id="filename" v-model="filename" class="text-black px-2">
+        <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting"
+          :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
+          Cut
+        </button>
+      </div>
+
     </section>
   </div>
 </template>
@@ -43,6 +48,7 @@ export default {
       start: null,
       end: null,
       cutting: false,
+      filename: 'clippi.mp4'
     }
   },
   computed: {
@@ -102,7 +108,10 @@ export default {
       await ffmpeg.run(...params);
       const data = ffmpeg.FS('readFile', 'output.mp4');
       let blobUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-      window.open(blobUrl);
+      let a = document.createElement('a');
+      a.download = this.filename || 'clippi.mp4';
+      a.href = blobUrl;
+      a.click();
       this.cutting = false;
     }
   }
