@@ -50,6 +50,30 @@ export default {
       return URL.createObjectURL(this.video)
     }
   },
+  mounted() {
+    window.addEventListener('keydown', (e) => {
+      console.log(e.key);
+      if (e.key == 'ArrowRight') {
+        this.$refs.video.currentTime += 1;
+      }
+      if (e.key == 'ArrowLeft') {
+        this.$refs.video.currentTime -= 1;
+      }
+      if (e.key == ',') {
+        this.$refs.video.currentTime -= 1 / 30;
+      }
+      if (e.key == '.') {
+        this.$refs.video.currentTime += 1 / 30;
+      }
+      if (e.key == 'k') {
+        if (this.$refs.video.paused) {
+          this.$refs.video.play();
+        } else {
+          this.$refs.video.pause();
+        }
+      }
+    });
+  },
   methods: {
     fileChanged(event) {
       console.log(event.target.files)
