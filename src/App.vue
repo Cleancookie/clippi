@@ -22,18 +22,21 @@
       </div>
     </section>
 
-    <section v-if="start && end" class="flex flex-col gap-2 items-center">
+    <section v-if="start && end" class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">3. Name & Save ✂️</h1>
-
-      <div class="flex gap-2">
-        <input type="text" name="filename" id="filename" v-model="filename" class="text-black px-2">
-        <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting"
-          :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
-          {{ cutButtonLabel }}
-        </button>
+      <input type="text" name="filename" id="filename" v-model="filename" class="text-black px-2 py-2">
+      <div>
+        <input type="checkbox" name="normalize-audio" id="normalize-audio" v-model="options.normalizeAudio">
+        <label for="normalize-audio">Normalize Audio</label>
       </div>
 
+      <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting"
+        :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
+        {{ cutButtonLabel }}
+      </button>
     </section>
+
+    <br class="py-8">
   </div>
 </template>
 
@@ -52,6 +55,9 @@ export default {
       cutting: false,
       filename: 'clippi.mp4',
       progress: 0, // float between 0-1
+      options: {
+        normalizeAudio: false,
+      },
     }
   },
   computed: {
@@ -90,6 +96,10 @@ export default {
         '-t', `${this.end - this.start}`,
         'output.mp4'
       ];
+
+      if (this.options.normalizeAudio) {
+        // https://superuser.com/questions/323119/how-can-i-normalize-audio-using-ffmpeg
+      }
       console.log(params);
       ffmpeg.setProgress(({ ratio }) => {
         this.progress = ratio;
