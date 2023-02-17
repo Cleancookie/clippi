@@ -2,22 +2,23 @@
   <div class="container mx-auto text-gray-100 pt-12 flex flex-col gap-12">
     <section class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">1. Select your video 🎬</h1>
-      
+
       <input type="file" name="fileInput" id="fileInput" @change="fileChanged" class="file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-cyan-500 file:text-gray-100 
-                ">
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-cyan-500 file:text-gray-100 
+                  ">
     </section>
 
     <section v-if="video !== null" class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">2. Trim your clip ⌚</h1>
       <video controls :width="'800'" ref="video" :key="video">
-        <source :src="videoUrl" :type="video.type"/>
+        <source :src="videoUrl" :type="video.type" />
       </video>
 
       <div class="flex gap-4">
-        <button @click="setStart" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full">Start {{ start }}</button>
+        <button @click="setStart" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full">Start {{ start
+        }}</button>
         <button @click="setEnd" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full">End {{ end }}</button>
       </div>
     </section>
@@ -31,7 +32,7 @@
       </div>
 
       <button @click="cut" class="px-4 py-2 font-semibold text-sm bg-cyan-500  rounded-full" :disabled="cutting"
-        :class="{ 'bg-cyan-800': cutting , 'text-gray-300': cutting}">
+        :class="{ 'bg-cyan-800': cutting, 'text-gray-300': cutting }">
         {{ cutButtonLabel }}
       </button>
     </section>
@@ -56,7 +57,7 @@ export default {
       filename: 'clippi.mp4',
       progress: 0, // float between 0-1
       options: {
-        normalizeAudio: false,
+        normalizeAudio: true,
       },
     }
   },
@@ -92,13 +93,16 @@ export default {
       let params = [
         '-ss', `${this.start}`,
         '-i', name,
-        // '-c', 'copy',
+        '-c:v', 'copy',
         '-t', `${this.end - this.start}`,
       ];
 
+
       if (this.options.normalizeAudio) {
         // https://superuser.com/questions/323119/how-can-i-normalize-audio-using-ffmpeg
-        params.push('-filter:a', 'dynaudnorm=p=0.9:s=5')
+        // http://underpop.online.fr/f/ffmpeg/help/dynaudnorm.htm.gz
+        params.push('-c:a', 'aac')
+        params.push('-filter:a', 'dynaudnorm=s=5:m=100')
       }
 
       params.push('output.mp4')
@@ -114,6 +118,7 @@ export default {
       a.href = blobUrl;
       a.click();
       this.cutting = false;
+      this.progress = 0;
     }
   }
 };
