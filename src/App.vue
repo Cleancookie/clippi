@@ -92,18 +92,20 @@ export default {
       let params = [
         '-ss', `${this.start}`,
         '-i', name,
-        '-c', 'copy',
+        // '-c', 'copy',
         '-t', `${this.end - this.start}`,
-        'output.mp4'
       ];
 
       if (this.options.normalizeAudio) {
         // https://superuser.com/questions/323119/how-can-i-normalize-audio-using-ffmpeg
+        params.push('-filter:a', 'dynaudnorm=p=0.9:s=5')
       }
-      console.log(params);
+
+      params.push('output.mp4')
       ffmpeg.setProgress(({ ratio }) => {
         this.progress = ratio;
       });
+      console.log(params);
       await ffmpeg.run(...params);
       const data = ffmpeg.FS('readFile', 'output.mp4');
       let blobUrl = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
