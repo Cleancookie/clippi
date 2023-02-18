@@ -23,7 +23,7 @@
       </div>
     </section>
 
-    <section v-if="start && end" class="flex flex-col gap-4 items-center">
+    <section v-if="start < end" class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">3. Name & Save ✂️</h1>
       <input type="text" name="filename" id="filename" v-model="filename" class="text-black px-2 py-2">
       <div>
@@ -51,8 +51,8 @@ export default {
   data() {
     return {
       video: null,
-      start: null,
-      end: null,
+      start: 0,
+      end: 0,
       cutting: false,
       filename: 'clippi.mp4',
       progress: 0, // float between 0-1
@@ -102,7 +102,7 @@ export default {
         // https://superuser.com/questions/323119/how-can-i-normalize-audio-using-ffmpeg
         // http://underpop.online.fr/f/ffmpeg/help/dynaudnorm.htm.gz
         params.push('-c:a', 'aac')
-        params.push('-filter:a', 'dynaudnorm=s=5:m=100')
+        params.push('-filter:a', 'dynaudnorm=g=3:f=10')
       }
 
       params.push('output.mp4')
