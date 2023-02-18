@@ -101,8 +101,8 @@ export default {
       if (this.options.normalizeAudio) {
         // https://superuser.com/questions/323119/how-can-i-normalize-audio-using-ffmpeg
         // http://underpop.online.fr/f/ffmpeg/help/dynaudnorm.htm.gz
-        params.push('-c:a', 'aac')
-        params.push('-filter:a', 'dynaudnorm=g=3:f=10')
+        // params.push('-c:a', 'aac')
+        params.push('-filter:a', 'loudnorm=print_format=json')
       }
 
       params.push('output.mp4')
@@ -119,6 +119,7 @@ export default {
       a.click();
       this.cutting = false;
       this.progress = 0;
+      ffmpeg.exit();
     }
   }
 };
