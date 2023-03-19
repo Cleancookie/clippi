@@ -8,6 +8,11 @@ export default {
                 return;
             }
 
+            // don't override the native video player hotkeys
+            if (document.activeElement.tagName == 'VIDEO') {
+                return;
+            }
+
             // don't do anything if video is not loaded
             if (!this.$refs.video) {
                 return;
