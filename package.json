@@ -13,6 +13,7 @@
     "@ffmpeg/ffmpeg": "^0.11.5",
     "@vueuse/core": "^9.12.0",
     "autoprefixer": "^10.4.12",
+    "git-rev-sync": "^3.0.2",
     "postcss": "^8.4.18",
     "vite-plugin-cross-origin-isolation": "^0.1.6",
     "vue": "^3.2.37"

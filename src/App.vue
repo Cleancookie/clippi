@@ -1,4 +1,7 @@
 <template>
+  <div class="w-full text-gray-400 text-right text-xs font-mono">
+    <a href="https://github.com/cleancookie/clippi" target="_blank">Build date: {{ new Date(buildDate).toLocaleString() }}</a>
+  </div>
   <div class="container mx-auto text-gray-100 pt-12 flex flex-col gap-12">
     <section class="flex flex-col gap-4 items-center">
       <h1 class="text-xl">1. Select your video 🎬</h1>
@@ -59,6 +62,7 @@ export default {
       options: {
         normalizeAudio: true,
       },
+      buildDate: __BUILD_DATE__,
     }
   },
   computed: {
@@ -121,6 +125,6 @@ export default {
       this.progress = 0;
       ffmpeg.exit();
     }
-  }
+  },
 };
 </script>
