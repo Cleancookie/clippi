@@ -60,7 +60,7 @@ export default {
       filename: 'clippi.mp4',
       progress: 0, // float between 0-1
       options: {
-        normalizeAudio: true,
+        normalizeAudio: false,
       },
       buildDate: __BUILD_DATE__,
     }
