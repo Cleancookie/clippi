@@ -1,6 +1,6 @@
 <template>
   <div class="w-full text-gray-400 text-right text-xs font-mono">
-    <a href="https://github.com/cleancookie/clippi" target="_blank">Build date: {{ new Date(buildDate).toLocaleString() }}</a>
+    <a href="https://github.com/cleancookie/clippi" target="_blank">Build date: {{ new Date(buildDate).toLocaleDateString('en-GB') }}</a>
   </div>
   <div class="container mx-auto text-gray-100 pt-12 flex flex-col gap-12">
     <section class="flex flex-col gap-4 items-center">
